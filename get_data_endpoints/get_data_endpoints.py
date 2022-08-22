@@ -249,4 +249,3 @@ if __name__ == '__main__':
 
     # Calling testFunc to write static output
     # testFunc()
-

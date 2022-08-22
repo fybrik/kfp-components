@@ -29,8 +29,7 @@ Edit the following files to include the relevant details of where your data is s
 * trainpii-asset.yaml
 
 Register in the Data Catalog (katalog) the training and testing data to be used by the pipeline, noting the catalog ID of each.
-
-```bash
+```
 kubectl apply -f house-price-demo-secret.yaml -n kubeflow
 kubectl apply -f testpii-asset.yaml -n kubeflow
 kubectl apply -f trainpii-asset.yaml -n kubeflow
@@ -43,8 +42,7 @@ From within the data folder run the following commands to register the data gove
 The read policy dictates that columns marked as having personal information should be redacted.
 
 Read Policy:
-
-```bash
+```
 kubectl -n fybrik-system create configmap pii-read-policy --from-file=pii-read-policy.rego
 		
 kubectl -n fybrik-system label configmap pii-read-policy openpolicyagent.org/policy=rego
@@ -56,7 +54,7 @@ The write policy allows all data to be written to any location registered with F
 
 Write Policy:
 
-```bash
+```
 kubectl -n fybrik-system create configmap allow-write-policy --from-file=allow-write-policy.rego
 		
 kubectl -n fybrik-system label configmap allow-write-policy openpolicyagent.org/policy=rego
@@ -70,14 +68,14 @@ while [[ $(kubectl get cm allow-write-policy -n fybrik-system -o 'jsonpath={.met
 From within samples/house_price_estimate run one of the following.
 
 If your kubeflow pipeline deployment uses Argo Workflows (the default):
-```bash
+```
 python3 pipeline-argo.py
 ```
 This will result in a file called pipelinev1argo.yaml.
 
 If you deployed kubeflow pipeline with tekton as the workflow manager:
 
-```bash
+```
 python3 pipeline-tekton.py
 ```
 This will result in a file called pipelinev1tekton.yaml.

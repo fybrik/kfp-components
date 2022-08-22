@@ -1,5 +1,5 @@
 """
-step #4: submit result to kaggle
+step #4: submit result 
 """
 import kfp
 import sys

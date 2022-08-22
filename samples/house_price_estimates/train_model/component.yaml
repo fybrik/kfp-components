@@ -19,3 +19,4 @@ implementation:
            '--namespace', {inputValue: namespace},
            '--result_name', {inputValue: result_name}, 
            '--result_endpoint_path', {inputPath: result_endpoint_path}]
+           

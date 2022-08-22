@@ -6,5 +6,5 @@ metadata:
 spec:
   id: kfp-object-store
   region: UK
-  endpoint: "https://s3.eu-de.cloud-object-storage.appdomain.cloud"
+  endpoint: "<storage endpoint>"
   secretRef:  kfp-storage-secret

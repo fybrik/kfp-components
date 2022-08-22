@@ -10,7 +10,7 @@ spec:
     connection:
       name: s3
       s3:
-        endpoint: "s3.eu-de.cloud-object-storage.appdomain.cloud"
+        endpoint: "<endpoint>"
         bucket: "house-price-demo"
         object_key: "test.csv"
   metadata:
@@ -19,3 +19,4 @@ spec:
     tags:
       finance: false
       housing: true
+      

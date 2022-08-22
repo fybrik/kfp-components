@@ -25,3 +25,4 @@ implementation:
       --train_endpoint, {outputPath: train_endpoint},
       --result_endpoint, {outputPath: result_endpoint},
       --result_catalogid, {outputPath: result_catalogid}]
+      
