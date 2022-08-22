@@ -29,7 +29,7 @@ kubectl apply -f rbac_resources.yaml -n kubeflow
 
 ### Storage for Write and Copy Flows
 
-[Register a storage account](https://fybrik.io/v1.0/samples/notebook-write/#deploy-resources-for-write-scenarios) in which the results can be written.  Example files are provided.  Please change the values in these files with storage endpoint and credential details.  
+[Register a storage account](https://fybrik.io/v1.0/samples/notebook-write/#deploy-resources-for-write-scenarios) in which the results can be written.  Example files are provided called kfp-storage-secret.yaml and kfp-storage-account.yaml.  Please change the values in these files with storage endpoint and credential details.  
 
 Note: Make sure that the endpoint is prefixed with https://
 
