@@ -6,7 +6,7 @@ processing is done on that data **in a secure and governed fashion by leveraging
 It is assumed that Fybrik is installed together with the chosen Data Catalog and Data Governance engine, and that:
 
 * training and testing datasets have been registered in the data catalog
-* governance policies have been defined in the Data Governance engine
+* governance policies have been defined in the data governance engine
 
 ## Prerequisits
 

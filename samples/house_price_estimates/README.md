@@ -22,7 +22,7 @@ This example also assumes that Fybrik is configured to use [katalog](https://fyb
 
 From within the data folder perform the following steps.
 
-Edit the following files to include the relevant details of where your data is stored.  They currently refer to an IBM cloud object store instance, but use an object store of your choice such as AWS S3, IBM Cloud Object Storage or Ceph.
+Edit the following files to include the relevant details of where your data is stored.  You may use an object store of your choice such as AWS S3, IBM Cloud Object Storage or Ceph.
 
 * house-price-demo-secret.yaml
 * testpii-asset.yaml
@@ -31,9 +31,9 @@ Edit the following files to include the relevant details of where your data is s
 Register in the Data Catalog (katalog) the training and testing data to be used by the pipeline, noting the catalog ID of each.
 
 ```bash
-kubectl apply -f house-price-demo-secret.yaml -n kubeflow
-kubectl apply -f testpii-asset.yaml -n kubeflow
-kubectl apply -f trainpii-asset.yaml -n kubeflow
+kubectl apply -f data/house-price-demo-secret.yaml -n kubeflow
+kubectl apply -f data/testpii-asset.yaml -n kubeflow
+kubectl apply -f data/trainpii-asset.yaml -n kubeflow
 ```
 
 ### Register Governance Policies
