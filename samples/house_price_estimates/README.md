@@ -20,8 +20,6 @@ This example also assumes that Fybrik is configured to use [katalog](https://fyb
 
 ### Prepare Data Assets and Storage
 
-From within the data folder perform the following steps.
-
 Edit the following files to include the relevant details of where your data is stored.  You may use an object store of your choice such as AWS S3, IBM Cloud Object Storage or Ceph.
 
 * house-price-demo-secret.yaml
@@ -38,14 +36,14 @@ kubectl apply -f data/trainpii-asset.yaml -n kubeflow
 
 ### Register Governance Policies
 
-From within the data folder run the following commands to register the data governance policies in the [OPA governance engine being used by Fybrik](https://fybrik.io/v1.0/tasks/using-opa/):
+Run the following commands to register the data governance policies in the [OPA governance engine being used by Fybrik](https://fybrik.io/v1.0/tasks/using-opa/):
 
 The read policy dictates that columns marked as having personal information should be redacted.
 
 Read Policy:
 
 ```bash
-kubectl -n fybrik-system create configmap pii-read-policy --from-file=pii-read-policy.rego
+kubectl -n fybrik-system create configmap pii-read-policy --from-file=data/pii-read-policy.rego
 		
 kubectl -n fybrik-system label configmap pii-read-policy openpolicyagent.org/policy=rego
 		
@@ -57,7 +55,7 @@ The write policy allows all data to be written to any location registered with F
 Write Policy:
 
 ```bash
-kubectl -n fybrik-system create configmap allow-write-policy --from-file=allow-write-policy.rego
+kubectl -n fybrik-system create configmap allow-write-policy --from-file=data/allow-write-policy.rego
 		
 kubectl -n fybrik-system label configmap allow-write-policy openpolicyagent.org/policy=rego
 		
@@ -65,26 +63,9 @@ while [[ $(kubectl get cm allow-write-policy -n fybrik-system -o 'jsonpath={.met
 
 ```
 
-### Compile Pipeline
-
-From within samples/house_price_estimate run one of the following.
-
-If your kubeflow pipeline deployment uses Argo Workflows (the default):
-```bash
-python3 pipeline-argo.py
-```
-This will result in a file called pipelinev1argo.yaml.
-
-If you deployed kubeflow pipeline with tekton as the workflow manager:
-
-```bash
-python3 pipeline-tekton.py
-```
-This will result in a file called pipelinev1tekton.yaml.
-
 ### Upload Pipeline
 
-Upload the file yaml file via the Kubeflow Pipeline GUI.
+Upload either the pipeline-argo.yaml or pipeline-tekton.yaml file via the Kubeflow Pipeline GUI, depending whether you installed kubeflow pipelines with Argo (default) or with Tekton Pipelines.
 
 See slide 17 of the [demo presentation](https://drive.google.com/file/d/1xn7pGe5pEAEZxnIzDdom9r7K6s78alcP/view?usp=sharing).
 
@@ -107,3 +88,22 @@ Click on each step in the Kubeflow Pipeline GUI and view its log to see the outp
 * submit-result prints out the data catalog asset ID of the newly created asset containing the results
 
 See slides 21-24 of the [demo presentation](https://drive.google.com/file/d/1xn7pGe5pEAEZxnIzDdom9r7K6s78alcP/view?usp=sharing).
+
+### Making Changes to the Pipeline
+
+If you want to experiment with changing the pipeline, you will need [Kubeflow Pipelines SDK](https://www.kubeflow.org/docs/components/pipelines/sdk/install-sdk/) and its prerequisits.
+
+After making changes in either pipeline-argo.py or pipeline-tekton.py, compile the pipeline as follows:
+
+If your kubeflow pipeline deployment uses Argo Workflows (the default):
+```bash
+python3 pipeline-argo.py
+```
+This will result in a file called pipeline-argo.yaml.
+
+If you deployed kubeflow pipeline with tekton as the workflow manager:
+
+```bash
+python3 pipeline-tekton.py
+```
+This will result in a file called pipeline-tekton.yaml.
