@@ -44,9 +44,9 @@ Read Policy:
 
 ```bash
 kubectl -n fybrik-system create configmap pii-read-policy --from-file=data/pii-read-policy.rego
-		
+  
 kubectl -n fybrik-system label configmap pii-read-policy openpolicyagent.org/policy=rego
-		
+  
 while [[ $(kubectl get cm pii-read-policy -n fybrik-system -o 'jsonpath={.metadata.annotations.openpolicyagent\.org/policy-status}') != '{"status":"ok"}' ]]; do echo "waiting for policy to be applied" && sleep 5; done
 ```
 
@@ -56,9 +56,9 @@ Write Policy:
 
 ```bash
 kubectl -n fybrik-system create configmap allow-write-policy --from-file=data/allow-write-policy.rego
-		
+  
 kubectl -n fybrik-system label configmap allow-write-policy openpolicyagent.org/policy=rego
-		
+  
 while [[ $(kubectl get cm allow-write-policy -n fybrik-system -o 'jsonpath={.metadata.annotations.openpolicyagent\.org/policy-status}') != '{"status":"ok"}' ]]; do echo "waiting for policy to be applied" && sleep 5; done
 
 ```
@@ -91,14 +91,18 @@ See slides 21-24 of the [demo presentation](https://drive.google.com/file/d/1xn7
 
 ### Making Changes to the Pipeline
 
-If you want to experiment with changing the pipeline, you will need [Kubeflow Pipelines SDK](https://www.kubeflow.org/docs/components/pipelines/sdk/install-sdk/) and its prerequisits.
+If you want to experiment with changing the pipeline, you will need [Kubeflow Pipelines SDK](https://www.kubeflow.org/docs/components/pipelines/sdk/install-sdk/) and its prerequisits.  Among the prerequisits you will need pip3 and the kfp library.  
+
+[pipenv](https://pypi.org/project/pipenv/) is also very helpful, but not required, since it assumes nothing about your pre-installed python libraries, and creates a brand new python environment without affecting other python installation you may have in your environment.
 
 After making changes in either pipeline-argo.py or pipeline-tekton.py, compile the pipeline as follows:
 
 If your kubeflow pipeline deployment uses Argo Workflows (the default):
+
 ```bash
 python3 pipeline-argo.py
 ```
+
 This will result in a file called pipeline-argo.yaml.
 
 If you deployed kubeflow pipeline with tekton as the workflow manager:
@@ -106,4 +110,5 @@ If you deployed kubeflow pipeline with tekton as the workflow manager:
 ```bash
 python3 pipeline-tekton.py
 ```
+
 This will result in a file called pipeline-tekton.yaml.

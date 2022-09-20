@@ -10,8 +10,10 @@ It is assumed that Fybrik is installed together with the chosen Data Catalog and
 
 ## Prerequisits
 
-* [Install kubeflow pipelines](https://www.kubeflow.org/docs/components/pipelines/installation/overview/#kubeflow-pipelines-standalone)
-  * To install on kind, see [these instructions](https://github.com/machine-learning-exchange/mlx/blob/main/docs/install-mlx-on-kind.md#install-kubeflow-pipelines-for-reference-only-optional)
+* [Install kubeflow pipelines](https://www.kubeflow.org/docs/components/pipelines/installation/overview/#kubeflow-pipelines-standalone).
+  * To install on kind, see [these instructions](https://github.com/machine-learning-exchange/mlx/blob/main/docs/install-mlx-on-kind.md#install-kubeflow-pipelines-for-reference-only-optional).  
+    * Please note that if you are running k8s 1.22 or higher on kind PIPELINE_VERSION should be 1.8.5 and not as indicated in the instructions.
+  * Installation takes time.  Pods often take restart repeatedly until all become ready.
 * [Install Fybrik](https://fybrik.io/v1.0/get-started/quickstart/)
 * [Deploy Datashim](https://github.com/datashim-io/datashim)
 
@@ -29,18 +31,21 @@ kubectl apply -f rbac_resources.yaml -n kubeflow
 
 ### Storage for Write and Copy Flows
 
-[Register a storage account](https://fybrik.io/v1.0/samples/notebook-write/#deploy-resources-for-write-scenarios) in which the results can be written.  Example files are provided called kfp-storage-secret.yaml and kfp-storage-account.yaml.  Please change the values in these files with storage endpoint and credential details.  
+Register a storage account in which the results can be written.  Example files are provided called kfp-storage-secret.yaml and kfp-storage-account.yaml.  Please change the values in these files with storage endpoint and credential details.  
 
-Note: Make sure that the endpoint is prefixed with https://
+Note: Make sure that the endpoint you provide includes the protocol prefix, example `https://`, because otherwise datashim will not work.
 
 ```
 kubectl apply -f kfp-storage-secret.yaml -n fybrik-system
 kubectl apply -f kfp-storage-account.yaml -n fybrik-system
 ```
 
+Fybrik documentation has more details about how to [create an account in object storage](https://fybrik.io/v1.1/samples/notebook-write/#create-an-account-in-object-storage)
+and [how to deploy resources for write scenarios](https://fybrik.io/v1.1/samples/notebook-write/#deploy-resources-for-write-scenarios).  The Fybrik examples create two storage accounts, but in our example one is sufficient.
+
 ## Usage
 
-The component receives the following parameters, all of which are strings.
+This component receives the following parameters, all of which are strings.
 
 Input:
 
