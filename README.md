@@ -6,9 +6,7 @@ This repository contains components that enable [Kubeflow Pipeline](https://www.
 
 ### Get Data Endpoints
 
-[get_data_endpoints](get_data_endpoints/README.md) is a kfp component that receives  catalog IDs of two input files, the intent for use of the data, run name, and namespace.
-
-It returns the virtual endpoints of the two input datasets and a virtual endpoint for the result dataset, to be used by subsequent components in the pipeline for reading the input datasets and for writing the results to the result dataset.  It also catalogs the newly created result dataset, and ensures that data governance policies defined in the data governance engine are enforced during the read and write operations.
+[get_data_endpoints](get_data_endpoints/README.md) is a kfp component that receives  catalog IDs of two input files.  It returns the virtual endpoints of the two input datasets and a virtual endpoint for the result dataset, to be used by subsequent components in the pipeline for reading the input datasets and for writing the results to the result dataset.  It also catalogs the newly created result dataset, and ensures that data governance policies defined in the data governance engine are enforced during the read and write operations.
 
 The [component's readme](get_data_endpoints/README.md) contains information about prerequisits and installations.
 
