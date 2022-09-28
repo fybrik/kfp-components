@@ -18,6 +18,8 @@ The sample provided assumes that you have put the [training](./data/trainwithpi.
 
 This example also assumes that Fybrik is configured to use [katalog](https://fybrik.io/v1.0/reference/katalog/) as a data catalog, and OPA is configured as Fybrik's data governance policy manager.  These are the defaults in [Fybrik's quick start](https://fybrik.io/v1.0/get-started/quickstart/)
 
+This example will be updated in the near future to use Open Metadata as the data catalog.
+
 ### Prepare Data Assets and Storage
 
 Edit the following files to include the relevant details of where your data is stored.  You may use an object store of your choice such as AWS S3, IBM Cloud Object Storage or Ceph.
