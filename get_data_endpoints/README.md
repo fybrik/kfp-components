@@ -14,10 +14,10 @@ It is assumed that Fybrik is installed together with the chosen Data Catalog and
   * To install on kind, see [these instructions](https://github.com/machine-learning-exchange/mlx/blob/main/docs/install-mlx-on-kind.md#install-kubeflow-pipelines-for-reference-only-optional).  
     * Please note that if you are running k8s 1.22 or higher on kind PIPELINE_VERSION should be 1.8.5 and not as indicated in the instructions.
   * Installation takes time.  Pods often take restart repeatedly until all become ready.
-* [Install Fybrik](https://fybrik.io/v1.0/get-started/quickstart/)
+* [Install Fybrik](https://fybrik.io/v1.2/get-started/quickstart/)
 * [Deploy Datashim](https://github.com/datashim-io/datashim)
 
-This component is compatible with Fybrik v1.0.
+This component is compatible with Fybrik v1.2.  
 
 ## Setup for Using this Component
 
@@ -104,7 +104,40 @@ def pipeline(
 If you wish to enhance or contribute to this component, please note that it is 
 written in python and packaged as a docker image.
 
-To build the docker image use:
+### Develop
+Create a [virtual python environment](https://python.land/virtual-environments/virtualenv) 
+by typing the following commands in the command line:
+```
+	python3 -m venv .venv-kfp
+    source .venv-kfp/bin/activate
+```	
+
+    Install required kfp python libraries
+```
+        Pip3 install kfp_tekton --upgrade
+        Pip3 install kfp --upgrade
+        Pip3 install kubernetes --upgrade
+```
+
+Edit get_data_points.py
+
+When done working, the virtual environment may be turned off by entering `Deactivate`
+
+
+### Test
+
+Register a training and testing datasets in the catalog as per the instructions [here](../samples/house_price_estimates/README.md#usage).
+
+
+To test the component independent of kubeflow pipelines you may run the following command:
+```
+python3 get_data_endpoints.py --train_dataset_id <train dataset id> --test_dataset_id <test dataset id> ./train.txt --test_endpoint ./test.txt --result_name <name for result dataset> --result_endpoint ./result.txt --result_catalogid ./resultcatalogid.txt --run_name <run name>
+```
+
+
+### Create Docker Image
+
+To build the docker image for use from kubeflow pipelines use:
 
 ```bash
 sh build_image.sh

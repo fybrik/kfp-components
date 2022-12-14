@@ -90,7 +90,7 @@ def load_data(endpoint_path, dataset_id, namespace):
     
 
     # Prepare the request
-    data_id = namespace + '/' + dataset_id
+    data_id = dataset_id
     request = { 'asset': data_id } 
 
     # Send request and fetch result as a pandas DataFrame

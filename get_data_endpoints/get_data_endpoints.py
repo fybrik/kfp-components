@@ -31,7 +31,7 @@ def getEndpoints(args, k8s_api):
     result_endpoint = ""
     result_catalogid = ""
 
-    while (fa_status == None) or ((train_status == None) or (test_status == None)):
+    while (fa_status == None) or ((train_status == None) or (test_status == None) or (result_status == None)):
         try:
             fa = k8s_api.get_namespaced_custom_object_status(
                 group="app.fybrik.io", 
@@ -43,8 +43,8 @@ def getEndpoints(args, k8s_api):
             # k8s status object exists
             if "status" in fa:
                 fa_status = fa["status"]
-                train_ready_condition = fa_status["assetStates"][args.namespace + "/" + args.train_dataset_id]["conditions"][0]["status"]
-                test_ready_condition = fa_status["assetStates"][args.namespace + "/" + args.test_dataset_id]["conditions"][0]["status"]
+                train_ready_condition = fa_status["assetStates"][args.train_dataset_id]["conditions"][0]["status"]
+                test_ready_condition = fa_status["assetStates"][args.test_dataset_id]["conditions"][0]["status"]
                 result_ready_condition = fa_status["assetStates"][args.result_name]["conditions"][0]["status"]
  
                 # Check if the status of the 3 is "ready".  If so, we're good to go.
@@ -58,8 +58,8 @@ def getEndpoints(args, k8s_api):
                     result_status = "Ready"
 
                 # Check for errors
-                train_error_condition = fa_status["assetStates"][args.namespace + "/" + args.train_dataset_id]["conditions"][2]["status"]
-                test_error_condition = fa_status["assetStates"][args.namespace + "/" + args.test_dataset_id]["conditions"][2]["status"]
+                train_error_condition = fa_status["assetStates"][args.train_dataset_id]["conditions"][2]["status"]
+                test_error_condition = fa_status["assetStates"][args.test_dataset_id]["conditions"][2]["status"]
                 result_error_condition = fa_status["assetStates"][args.result_name]["conditions"][2]["status"]
                 if "True" in train_error_condition:
                     train_status = "Error"
@@ -71,8 +71,8 @@ def getEndpoints(args, k8s_api):
                     result_status = "Error"
 
                 # Check for deny
-                train_deny_condition = fa_status["assetStates"][args.namespace + "/" + args.train_dataset_id]["conditions"][1]["status"]
-                test_deny_condition = fa_status["assetStates"][args.namespace + "/" + args.test_dataset_id]["conditions"][1]["status"]
+                train_deny_condition = fa_status["assetStates"][args.train_dataset_id]["conditions"][1]["status"]
+                test_deny_condition = fa_status["assetStates"][args.test_dataset_id]["conditions"][1]["status"]
                 result_deny_condition = fa_status["assetStates"][args.result_name]["conditions"][1]["status"]
                 if "True" in train_deny_condition:
                     train_status = "Deny"
@@ -91,11 +91,11 @@ def getEndpoints(args, k8s_api):
 
     # If ready, read the endpoint of each of the datasets
     if train_status == "Ready":
-        train_struct = fa_status["assetStates"][args.namespace + "/" + args.train_dataset_id]["endpoint"]["fybrik-arrow-flight"]
+        train_struct = fa_status["assetStates"][args.train_dataset_id]["endpoint"]["fybrik-arrow-flight"]
         train_endpoint = train_struct["scheme"] + "://" + train_struct["hostname"] + ":" + train_struct["port"]
 
     if test_status == "Ready":
-        test_struct = fa_status["assetStates"][args.namespace + "/" + args.test_dataset_id]["endpoint"]["fybrik-arrow-flight"]
+        test_struct = fa_status["assetStates"][args.test_dataset_id]["endpoint"]["fybrik-arrow-flight"]
         test_endpoint = test_struct["scheme"] + "://" + test_struct["hostname"] + ":" + test_struct["port"]       
 
     if result_status == "Ready":
@@ -104,7 +104,7 @@ def getEndpoints(args, k8s_api):
         result_catalogid = fa_status["assetStates"][args.result_name]["catalogedAsset"]
  
     print("train_status is " + train_status + ", train_endpoint: " + train_endpoint)
-    print("train_status is " + test_status + ", test_endpoint: " + test_endpoint)
+    print("test_status is " + test_status + ", test_endpoint: " + test_endpoint)
     print("result_status is " + result_status + ", result_endpoint: " + result_endpoint)
     print("result_catalogid is %s\n" % result_catalogid)
 
@@ -122,6 +122,7 @@ def getEndpoints(args, k8s_api):
 
 
 # Create a FybrikApplication with the datasets requested and the context
+# NOTE: Columns in result dataset are dummy, due to bug in OpenMetadata connector
 def createFybrikApplicationObj(args):
     fybrikApp = {
         "apiVersion": "app.fybrik.io/v1beta1",
@@ -144,7 +145,7 @@ def createFybrikApplicationObj(args):
             },
             "data": [
                 {
-                    "dataSetID": args.namespace + "/" + args.test_dataset_id,
+                    "dataSetID": args.test_dataset_id,
                     "flow": "read",
                     "requirements": {
                         "interface": {
@@ -153,7 +154,7 @@ def createFybrikApplicationObj(args):
                     }
                 },
                 {
-                    "dataSetID": args.namespace + "/" + args.train_dataset_id,
+                    "dataSetID": args.train_dataset_id,
                     "flow": "read",
                     "requirements": {
                         "interface": {
@@ -166,11 +167,20 @@ def createFybrikApplicationObj(args):
                     "flow": "write",
                     "requirements": {
                         "interface": {
-                            "protocol": "fybrik-arrow-flight"
+                            "protocol": "fybrik-arrow-flight",
+                            "dataFormat": "csv"
                         },
                         "flowParams": {
                             "isNewDataSet": True,
-                            "catalog": args.namespace
+                            "catalog": args.namespace,
+                            "metadata": {
+                                "columns": [{
+                                    "name": "columnA"
+                                },
+                                {
+                                    "name": "columnB"
+                                }]
+                            }
                         }
                     }
                 }
