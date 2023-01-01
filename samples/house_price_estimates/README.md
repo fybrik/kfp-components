@@ -121,7 +121,7 @@ See slides 21-24 of the [demo presentation](https://drive.google.com/file/d/1xn7
 The final state with submit-result step results will appear as follows:
 <br><center><img src="./img/kfp_gui/15_view_run_result.jpeg" width=600></center>
 
-After the run result is complete you can go to the catalog and see the new catalog entry, and in your storage you can see the newly created result data.
+After the run is complete you can go to the catalog and see the new catalog entry, and in your storage you can see the newly created result data.
 
 
 ### Making Changes to the Pipeline
