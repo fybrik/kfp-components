@@ -39,7 +39,7 @@ def datatable(
     
 
     # Prepare the request
-    data_id = namespace + '/' + args.train_dataset_id
+    data_id = args.train_dataset_id
     request = { 'asset': data_id } 
 
     # Send request and fetch result as a pandas DataFrame
