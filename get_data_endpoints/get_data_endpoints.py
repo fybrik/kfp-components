@@ -92,15 +92,15 @@ def getEndpoints(args, k8s_api):
     # If ready, read the endpoint of each of the datasets
     if train_status == "Ready":
         train_struct = fa_status["assetStates"][args.train_dataset_id]["endpoint"]["fybrik-arrow-flight"]
-        train_endpoint = train_struct["scheme"] + "://" + train_struct["hostname"] + ":" + train_struct["port"]
+        train_endpoint = train_struct["scheme"] + "://" + train_struct["hostname"] + ":" + str(train_struct["port"])
 
     if test_status == "Ready":
         test_struct = fa_status["assetStates"][args.test_dataset_id]["endpoint"]["fybrik-arrow-flight"]
-        test_endpoint = test_struct["scheme"] + "://" + test_struct["hostname"] + ":" + test_struct["port"]       
+        test_endpoint = test_struct["scheme"] + "://" + test_struct["hostname"] + ":" + str(test_struct["port"])
 
     if result_status == "Ready":
         result_struct = fa_status["assetStates"][args.result_name]["endpoint"]["fybrik-arrow-flight"]
-        result_endpoint = result_struct["scheme"] + "://" + result_struct["hostname"] + ":" + result_struct["port"]       
+        result_endpoint = result_struct["scheme"] + "://" + result_struct["hostname"] + ":" + str(result_struct["port"])
         result_catalogid = fa_status["assetStates"][args.result_name]["catalogedAsset"]
  
     print("train_status is " + train_status + ", train_endpoint: " + train_endpoint)
