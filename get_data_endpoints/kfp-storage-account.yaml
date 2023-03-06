@@ -1,10 +1,12 @@
-apiVersion:   app.fybrik.io/v1beta1
+apiVersion:   app.fybrik.io/v1beta2
 kind:         FybrikStorageAccount
 metadata:
   name: kfp-storage-account
   namespace: fybrik-system
 spec:
   id: kfp-object-store
-  region: UK
-  endpoint: "<storage endpoint>"
+  geography: UK
   secretRef:  kfp-storage-secret
+  type: s3
+  s3:
+    endpoint: "<storage endpoint>"
